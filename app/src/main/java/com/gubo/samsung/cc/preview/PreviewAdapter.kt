@@ -1,10 +1,9 @@
 
-package com.gubo.samsung.cc.open
+package com.gubo.samsung.cc.preview
 
 import android.net.*
 import android.view.*
 import android.widget.*
-import android.support.v4.widget.*
 import android.support.v7.widget.*
 
 import com.squareup.picasso.*
@@ -19,27 +18,24 @@ import com.gubo.samsung.cc.model.*
  *
  * Created by GUBO on 7/24/2017.
  */
-open class OpenAdapter( var view : View? ) : OpenDisplay
+class PreviewAdapter( var view : View? ) : PreviewDisplay
 {
     private var dataSource: DataSource<Photo>? = null
     private var recyclerView: RecyclerView? = null
-    private var openListener: OpenListener? = null
+    private var previewListener: PreviewListener? = null
 
     init {
-        debug( { "OpenAdapter ${view}" } )
+        debug( { "PreviewAdapter ${view}" } )
 
-        recyclerView = view?.findViewById( R.id.openrecyclerview ) as RecyclerView
-        recyclerView?.layoutManager = LinearLayoutManager( view?.context,LinearLayoutManager.VERTICAL,false )
+        recyclerView = view?.findViewById( R.id.previewrecyclerview ) as RecyclerView
+        recyclerView?.layoutManager = LinearLayoutManager( view?.context,LinearLayoutManager.HORIZONTAL,false )
         recyclerView?.adapter = PhotoAdapter()
         recyclerView?.setHasFixedSize( true )
-
-        val swipeRefreshLayout = view?.findViewById( R.id.openswiperefreshlayout ) as SwipeRefreshLayout
-        swipeRefreshLayout?.isEnabled = false // TODO: wire up swipeRefreshLayout to call dataSource.requestRefresh
 
         // TODO: incorporate ReactiveLinearScrollListener for paging
     }
 
-    fun using( dataSource:DataSource<Photo> ) : OpenAdapter {
+    fun using( dataSource:DataSource<Photo> ) : PreviewAdapter {
         this.dataSource = dataSource
 
         val photoAdapter = recyclerView?.adapter as PhotoAdapter
@@ -48,11 +44,11 @@ open class OpenAdapter( var view : View? ) : OpenDisplay
         return this
     }
 
-    override fun setOpenListener( openListener:OpenListener? ) {
-        this.openListener = openListener
+    override fun setPreviewListener( previewListener:PreviewListener? ) {
+        this.previewListener = previewListener
 
         val photoAdapter = recyclerView?.adapter as PhotoAdapter
-        photoAdapter?.openListener = this.openListener
+        photoAdapter?.previewListener = this.previewListener
     }
 
     override fun setItemCount( count:Int ) {
@@ -72,27 +68,23 @@ open class OpenAdapter( var view : View? ) : OpenDisplay
     }
 
     override fun release() {
-        openListener = null
+        previewListener = null
         recyclerView = null
         view = null
-        debug( { "OpenAdapter.release" } )
+        debug( { "PreviewAdapter.release" } )
     }
 
     private class PhotoHolder( view:View ) : RecyclerView.ViewHolder( view )
     {
         private lateinit var photoView: View
         private lateinit var photoimageview : ImageView
-        private lateinit var photoTitleTextview : TextView
 
         init {
-            photoView = itemView.findViewById( R.id.openphotoview ) as View
-            photoimageview = itemView.findViewById( R.id.openphotoimageview ) as ImageView
-            photoTitleTextview = itemView.findViewById( R.id.openphototitletextview ) as TextView
+            photoView = itemView.findViewById( R.id.previewphotoview ) as View
+            photoimageview = itemView.findViewById( R.id.previewphotoimageview ) as ImageView
         }
 
-        fun bind( photo:Photo,openListener:OpenListener? ) {
-            photoView.setOnClickListener{ v -> openListener?.onSelectPhoto( photo ) }
-
+        fun bind( photo:Photo,previewListener:PreviewListener? ) {
             photoimageview.setImageDrawable( null )
             val uri = Uri.parse( photo.url )
             Picasso.with( itemView.context )
@@ -100,8 +92,6 @@ open class OpenAdapter( var view : View? ) : OpenDisplay
                     .fit()
                     .centerInside()
                     .into( photoimageview )
-
-            photoTitleTextview.text = photo.name
         }
     }
 
@@ -110,7 +100,7 @@ open class OpenAdapter( var view : View? ) : OpenDisplay
         private var itemCount = 0
 
         var dataSource : DataSource<Photo>? = null
-        var openListener : OpenListener? = null
+        var previewListener : PreviewListener? = null
 
         fun setItemCount( count:Int ) {
             this.itemCount = count
@@ -121,13 +111,13 @@ open class OpenAdapter( var view : View? ) : OpenDisplay
         }
 
         override fun onCreateViewHolder( parent:ViewGroup?,viewType:Int ) : PhotoHolder {
-            val view = LayoutInflater.from( parent?.getContext() ).inflate( R.layout.openphoto,parent,false )
+            val view = LayoutInflater.from( parent?.getContext() ).inflate( R.layout.previewphoto,parent,false )
             return PhotoHolder( view )
         }
 
         override fun onBindViewHolder( holder:PhotoHolder?,position:Int ) {
             val photo = dataSource?.getDataFor( position ) ?: Photo()
-            holder?.bind( photo,openListener )
+            holder?.bind( photo,previewListener )
         }
     }
 }

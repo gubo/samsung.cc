@@ -4,6 +4,7 @@ package com.gubo.samsung.cc
 import javax.inject.*
 
 import android.os.*
+import android.view.*
 import android.content.*
 import android.support.v7.app.*
 
@@ -55,6 +56,12 @@ class HomeActivity : AppCompatActivity()
         homePresenter.unbind()
     }
 
+    fun onLeavePreview( view : View) {
+        if ( getSupportFragmentManager().backStackEntryCount >= 1 ) {
+            getSupportFragmentManager().popBackStack()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if ( !isChangingConfigurations ) {
@@ -68,7 +75,7 @@ class HomeActivity : AppCompatActivity()
             open( any.album )
         }
         if ( any is PreviewAlbumEvent ) {
-            debug { "onPreviewAlbum ${any.album.name}" }
+            preview( any.album )
         }
     }
 
@@ -77,5 +84,14 @@ class HomeActivity : AppCompatActivity()
         val json = GsonBuilder().setPrettyPrinting().create().toJson( album )
         intent.putExtra( "album",json )
         startActivityForResult( intent,100 )
+    }
+
+    private fun preview( album:Album ) {
+        val previewFragment = createPreviewFragment( album )
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add( R.id.homepreviewholder,previewFragment )
+                .addToBackStack( "preview" )
+                .commit();
     }
 }

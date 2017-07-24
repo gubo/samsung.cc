@@ -7,6 +7,7 @@ import dagger.*
 
 import com.gubo.samsung.cc.home.*
 import com.gubo.samsung.cc.open.*
+import com.gubo.samsung.cc.preview.*
 
 /**
  * Created by GUBO on 7/20/2017.
@@ -19,4 +20,6 @@ interface AppComponent
     fun inject( homePresenter: HomePresenter )
     fun inject( openActivity: OpenActivity )
     fun inject( openPresenter: OpenPresenter )
+    fun inject( previewFragment: PreviewFragment )
+    fun inject( previewPresenter: PreviewPresenter )
 }

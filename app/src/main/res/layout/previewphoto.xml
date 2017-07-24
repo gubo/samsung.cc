@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:context=".HomeActivity"
+
+    android:id="@+id/previewphotoview"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:clickable="false"
+        android:id="@+id/previewphotoimageview"
+        android:layout_gravity="center"
+        android:src="@drawable/placeholder" android:scaleType="centerCrop"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+    </ImageView>
+
+</FrameLayout>

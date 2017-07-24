@@ -6,7 +6,7 @@
 
     tools:context=".OpenActivity"
 
-    android:id="@+id/photoview"
+    android:id="@+id/openphotoview"
     android:orientation="vertical" android:clickable="true"
     android:layout_marginTop="4dp" android:layout_marginBottom="4dp"
     android:layout_width="match_parent" android:layout_height="wrap_content">
@@ -16,14 +16,14 @@
 
     <ImageView
         android:clickable="false"
-        android:id="@+id/photoimageview"
+        android:id="@+id/openphotoimageview"
         android:layout_gravity="center"
         android:src="@drawable/placeholder" android:scaleType="centerCrop"
         android:layout_width="256dp" android:layout_height="256dp">
     </ImageView>
 
     <TextView
-        android:id="@+id/phototitletextview"
+        android:id="@+id/openphototitletextview"
         android:clickable="false"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="Food" android:lines="1" android:ellipsize="end" android:padding="3dp"
